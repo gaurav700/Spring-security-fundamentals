@@ -1,6 +1,7 @@
 package com.springSecurity.Spring.security.fundamentals.controller;
 
 import com.springSecurity.Spring.security.fundamentals.dto.LoginDTO;
+import com.springSecurity.Spring.security.fundamentals.dto.LoginResponseDTO;
 import com.springSecurity.Spring.security.fundamentals.dto.SignUpDTO;
 import com.springSecurity.Spring.security.fundamentals.dto.UserDTO;
 import com.springSecurity.Spring.security.fundamentals.services.AuthService;
@@ -29,9 +30,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO login, HttpServletRequest request, HttpServletResponse response) {
-        String token = authService.login(login);
-        Cookie cookie = new Cookie("token", token);
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO login, HttpServletRequest request, HttpServletResponse response) {
+        LoginResponseDTO token = authService.login(login);
+        Cookie cookie = new Cookie("refreshToken", token.getRefreshToken());
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
         return ResponseEntity.ok(token);
